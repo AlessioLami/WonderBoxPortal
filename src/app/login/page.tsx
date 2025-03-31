@@ -4,12 +4,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import ThemeButton from "@/components/ThemeButton";
 import LoginForm from "@/components/LoginForm";
 
+import { useLoginMutation } from "../services/backendApi";
+import {useState} from "react";
+
 
 
 export default function Login() {
 
-	const handleSubmit = () => {
-		alert("lol")
+	const [ login, {isLoading, error: loginError }] = useLoginMutation()
+
+	const [ formData, setFormData ] = useState({email: "", password: ""})
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData({...formData, [e.target.name]: e.target.value})
+	}
+
+
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+		try{
+			await login(formData).unwrap()
+		} catch(error){
+			console.log(error)
+		}
 	}
 
   return <div className="flex min-h-svh items-center justify-center p-5 md:p-10">

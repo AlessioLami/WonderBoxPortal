@@ -11,6 +11,7 @@ import StatsBar from "@/components/StatsBar";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis } from "recharts"
 import {ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart";
 
+import { useGetMeasurementsQuery } from "./services/backendApi";
 
 
 const chartConfig = {
@@ -35,6 +36,10 @@ export type Limit =
 
 export default function Home() {
 
+	const {data, error, isLoading } = useGetMeasurementsQuery()
+
+	if(error) console.log(error)
+	console.log(data)
 
 	const parameters = [
 		{ name: "Temperature", value: 35, unit: "°C", path: "/temperature", limit: {type: "range", min: 20, max: 45}},
