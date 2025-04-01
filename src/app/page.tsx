@@ -10,6 +10,7 @@ import StatsBar from "@/components/StatsBar";
 import ParameterChart, {ChartData, ChartConfig} from "@/components/ParameterChart";
 
 import { useGetMeasurementsQuery } from "./services/backendApi";
+import {Loader2} from "lucide-react";
 
 
 const chartConfig: ChartConfig = {
@@ -39,17 +40,26 @@ export default function Home() {
 	const deviceId = "WXFSTURL00.00030"
 	const dateStart = "2025-01-23T09:00:00Z"
 
+
 	const {data, error, isLoading } = useGetMeasurementsQuery({deviceId, dateStart})
+	
+	const parameters = data?.data?.logDispo[0]?.measurament?.map(parameter => ({
+		name: parameter.parameter,
+		value: parameter.value,
+		limitResponse: parameter.limitResponse,
+		unit: parameter.unit,
+		path: `/${parameter.parameter}`,
+		limit: {type: "range", min: 30, max: 60} 
+	})) ?? []
 
-	if(error) console.log(error)
-	console.log(data)
 
-	const parameters = [
+
+	/*const parameters = [
 		{ name: "Temperature", value: 35, unit: "°C", path: "/temperature", limit: {type: "range", min: 20, max: 45}},
 		{ name: "Humidity", value: 90, unit: "%", path: "/humidity", limit: {type: "range", min: 30, max: 60}},
 		{ name: "Light Intensity", value: 200, unit: "lux", path: "/light_intensity", limit: {type: "greatherThan", value: 100} },
 		{ name: "Noise", value: 50, unit: "dB", path: "/noise", limit: {type: "lessThan", value: 70} },
-	]	
+		]	*/
 
   return <SidebarProvider>
 			  <AppSidebar/>
@@ -67,14 +77,26 @@ export default function Home() {
 						</div> 
 				</div>
 
+
 			<div className="p-5 flex flex-col items-center">
-				<StatsBar/>
-				<div className="flex flex-col justify-center items-">
-					<div className=" grid  sm:gap-3 md:gap-5 lg:gap-10 2xl:gap-20 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-between items-center w-full">
-						{parameters.map((param) => (<ParameterCard key={param.name} {...param}/>))}
+				{isLoading ? 
+					(
+					<div className="flex justify-center items-center flex-col h-64">
+						<Loader2 className="w-12 h-12 animate-spin text-zinc-600"></Loader2>
 					</div>
-					<ParameterChart chartConfig={chartConfig} chartData={chartData}/>
-				</div>
+				) : 
+					(
+						<>
+							<StatsBar/>
+							<div className="flex flex-col justify-center items-">
+								<div className=" grid  sm:gap-3 md:gap-5 lg:gap-10 2xl:gap-20 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-between items-center w-full">
+									{parameters.map((param) => (<ParameterCard key={param.name} {...param}/>))}
+								</div>
+							<ParameterChart chartConfig={chartConfig} chartData={chartData}/>
+							</div>
+						</>
+				)}
+				
 		</div>	
 			  </SidebarInset>
 		  </SidebarProvider>

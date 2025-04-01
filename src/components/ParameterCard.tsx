@@ -14,28 +14,17 @@ type Limit =
 export type ParameterProps = {
 	name: string,
 	value: number,
+	limitResponse: string,
 	unit: string,
 	path: string,
 	limit: Limit
 }
 
-const isValueWithinLimits = (value: number, limit: Limit): boolean => {
-		switch(limit.type){
-			case "range":
-				return value >= limit.min && value <= limit.max;
-			case "greatherThan":
-				return value > limit.value;
-			case "lessThan":
-				return value < limit.value;
-			default:
-				return false;
 
-	}
-}
 
 const ParameterCard = (props: ParameterProps) => {
 
-	const isWithinLimits = isValueWithinLimits(props.value, props.limit);
+	const isHappy = props.limitResponse === "OK";
 	const formatLimit = (limit) => {
 		switch(limit.type){
 			case "range":
@@ -71,7 +60,7 @@ const ParameterCard = (props: ParameterProps) => {
 
 				<Button onClick={() => console.log(props.name)} className="absolute  max-w-120 w-80 h-70 sm:w-60 sm:h-60 md:h-60 2xl:w-70 2xl:h-70 z-100 hidden sm:block bg-trasparent hover:bg-zinc-600 opacity-0 hover:opacity-20 transition-opacity transition-colors"></Button>
 				<h1 className="mb-[10px] font-bold text-xl flex items-center gap-2">{props.name} {formatSymbol(props.name)}</h1>
-				{isWithinLimits ? <Smile color={"green"} size={90}/> : <Frown color="red" size={90}/>}
+				{isHappy ? <Smile color={"green"} size={90}/> : <Frown color="red" size={90}/>}
 				<h1 className="mt-[10px] font-bold text-4xl sm:text-5xl">{props.value}{props.unit}</h1>
 				<div className="flex mt-3 sm:mt-5 justify-between sm:justify-center items-center w-full">
 					<p className="font-bold text-xl">{formatLimit(props.limit)}{props.unit}</p>

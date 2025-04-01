@@ -7,6 +7,7 @@ import LoginForm from "@/components/LoginForm";
 import { useLoginMutation } from "../services/backendApi";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import {toast, Toaster} from "sonner";
 
 
 
@@ -30,11 +31,13 @@ export default function Login() {
 			await login(formData).unwrap()
 			router.replace("/")
 		} catch(error){
-			console.log(error)
+			toast.dismiss()
+			toast("Incorrect username or password.", {style: {border:"none", backgroundColor: "rgba(255, 69, 69)",  fontWeight: "bold", fontSize: "15px"}})
 		}
 	}
 
   return <div className="flex min-h-svh items-center justify-center p-5 md:p-10">
+	  <Toaster theme="system" position="top-center" />
 			<Card className="w-full max-w-sm">
 				<CardHeader>
 					<CardTitle className="text-2xl flex justify-between truncate leading-tight font-bold">
