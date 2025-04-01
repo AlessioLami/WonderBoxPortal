@@ -6,6 +6,7 @@ import LoginForm from "@/components/LoginForm";
 
 import { useLoginMutation } from "../services/backendApi";
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 
 
@@ -14,6 +15,8 @@ export default function Login() {
 	const [ login, {isLoading, error: loginError }] = useLoginMutation()
 
 	const [ formData, setFormData ] = useState({email: "", password: ""})
+	
+	const router = useRouter()
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({...formData, [e.target.name]: e.target.value})
@@ -25,6 +28,7 @@ export default function Login() {
 		e.preventDefault()
 		try{
 			await login(formData).unwrap()
+			router.replace("/")
 		} catch(error){
 			console.log(error)
 		}
@@ -43,7 +47,7 @@ export default function Login() {
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSubmit}>
-						<LoginForm/>
+						<LoginForm formData={formData} handleChange={handleChange}/>
 					</form>	
 				</CardContent>
 			</Card>

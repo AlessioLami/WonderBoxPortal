@@ -2,8 +2,19 @@
 
 import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@radix-ui/react-dropdown-menu"
 import {Avatar, AvatarImage, AvatarFallback } from "./ui/avatar"
+import {Button} from "./ui/button"
+import {useLogoutMutation} from "@/app/services/backendApi"
+import {redirect} from "next/navigation"
+
 
 const NavProfile = () => {
+
+	const [ logout ] = useLogoutMutation()
+	const logoutRedirect = () => {
+		logout("")
+		redirect("/login")
+	}
+
 	return <DropdownMenu>
 				<DropdownMenuTrigger>
 				<div className="flex items-center gap-3">
@@ -17,7 +28,9 @@ const NavProfile = () => {
 				</div>
 			</div>
 				</DropdownMenuTrigger>	
-				<DropdownMenuContent>TEST</DropdownMenuContent>
+				<DropdownMenuContent>
+					<Button onClick={() => logoutRedirect()}>Logout</Button>
+				</DropdownMenuContent>
 			</DropdownMenu>
 }
 

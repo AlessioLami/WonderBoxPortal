@@ -15,12 +15,12 @@ const NavMain = () => {
 				<SidebarMenu>
 					{items.map((item) => (
 						<SidebarMenuItem key={item.name}>
+							<a href={item.path}>
 							<SidebarMenuButton >
-								<a href={item.path} className="flex truncate leading-tight gap-2 items-center">
 									<item.icon/>
 									<span className="font-semibold">{item.name}</span>
-								</a>
 							</SidebarMenuButton>
+							</a>
 						</SidebarMenuItem>
 						))}
 				</SidebarMenu>

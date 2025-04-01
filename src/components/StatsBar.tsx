@@ -17,13 +17,13 @@ const StatsBar = () => {
 	return(
 		
 		<>
-			<div className=" p-5 border-2 border-zinc-800 dark:bg-zinc-900 w-full h-20 rounded-md flex justify-between items-center">
+			<div className="p-5 border-2 border-zinc-800 dark:bg-zinc-900 w-full h-20 rounded-md flex justify-between items-center">
 				<div className="flex">
 				{stats.map((stat) => (
-					<div className="p-2 flex items-center justify-center gap-2" key={stat.name}>
+					<div className="p-2 mr-0 md:mr-5 flex items-center justify-center gap-2" key={stat.name}>
 						<stat.icon className="hidden sm:block" size={36}/>	
 					<div className="leading-tight">
-						<h1 className="font-bold text-sm sm:text-md">{stat.name}</h1>
+						<h1 className="font-bold text-md sm:text-[13px] md:text-lg">{stat.name}</h1>
 						<p className="font-semibold text-green-500 text-sm">{stat.value}</p>
 					</div>
 					</div>

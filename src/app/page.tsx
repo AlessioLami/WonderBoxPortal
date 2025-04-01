@@ -7,36 +7,39 @@ import ParameterCard from "@/components/ParameterCard";
 import ThemeButton from "@/components/ThemeButton";
 import ProfilePicture from "@/components/ProfilePicture"
 import StatsBar from "@/components/StatsBar";
-
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis } from "recharts"
-import {ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart";
+import ParameterChart, {ChartData, ChartConfig} from "@/components/ParameterChart";
 
 import { useGetMeasurementsQuery } from "./services/backendApi";
 
 
-const chartConfig = {
+const chartConfig: ChartConfig = {
 	temperature: {
 		label: "Temperature"
+	},
+	humidity: {
+		label: "Humidity"
 	}
 }
 
-const chartData = [
-	{ month: "Jan", temperature: 40 },
-	{ month: "Feb", temperature: 30 },
-	{ month: "Mar", temperature: 32 },
-	{ month: "Apr", temperature: 38 }
+const chartData: ChartData = [
+	{ day: 1, value: 40 },
+	{ day: 2, value: 30 },
+	{ day: 3, value: 32 },
+	{ day: 4, value: 38 },
+	{ day: 5, value: 36 },
+	{ day: 6, value: 35 },
+	{ day: 7, value: 31 },
 ]
 
 
 
-export type Limit = 
-	| { type: "range"; min: number; max: number}
-	| { type: "greatherThan"; value: number }
-	| { type: "lessThan"; value: number };
 
 export default function Home() {
 
-	const {data, error, isLoading } = useGetMeasurementsQuery()
+	const deviceId = "WXFSTURL00.00030"
+	const dateStart = "2025-01-23T09:00:00Z"
+
+	const {data, error, isLoading } = useGetMeasurementsQuery({deviceId, dateStart})
 
 	if(error) console.log(error)
 	console.log(data)
@@ -64,28 +67,14 @@ export default function Home() {
 						</div> 
 				</div>
 
-			<div className="p-5 flex flex-col">
+			<div className="p-5 flex flex-col items-center">
 				<StatsBar/>
-				<div className="flex justify-center items-start sm:justify-start gap-30">
-					<div className=" grid  grid-cols-1 w-80 sm:w-60 2xl:w-70">
+				<div className="flex flex-col justify-center items-">
+					<div className=" grid  sm:gap-3 md:gap-5 lg:gap-10 2xl:gap-20 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-between items-center w-full">
 						{parameters.map((param) => (<ParameterCard key={param.name} {...param}/>))}
 					</div>
-				<div className="hidden sm:block dark:bg-zinc-900 border-2 border-zinc-800 w-full my-5 rounded-sm p-2 ">
-					<ResponsiveContainer>
-						<ChartContainer config={chartConfig}>
-							<AreaChart  accessibilityLayer data={chartData}  margin={{top: 30,  left: 12, right: 12}}>
-								<CartesianGrid  vertical={true}/>
-								<XAxis  dataKey="month" tickLine={false} axisLine={false} tickMargin={2}/>
-								<ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" hideLabel/>}/>
-								<Area dataKey="temperature" type="linear" fill="gray" fillOpacity={0.3} stroke=""/>
-						</AreaChart>
-					</ChartContainer>
-					</ResponsiveContainer>
-				
-					<h1 className="font-semibold text-xl">Temperature</h1>
+					<ParameterChart chartConfig={chartConfig} chartData={chartData}/>
 				</div>
-			</div>
-
 		</div>	
 			  </SidebarInset>
 		  </SidebarProvider>
