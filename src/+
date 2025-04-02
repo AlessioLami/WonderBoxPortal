@@ -4,7 +4,8 @@ import  Limit  from "@/app/page"
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { ChartNoAxesCombined, Smile, Frown, Thermometer, Droplets, Lightbulb, Volume2} from "lucide-react";
-import { GaugeComponent } from "react-gauge-component"
+import GaugeChart from "react-gauge-chart";
+
 type Limit = 
 	| { type: "range"; min: number; max: number}
 	| { type: "greatherThan"; value: number }
@@ -24,6 +25,17 @@ export type ParameterProps = {
 const ParameterCard = (props: ParameterProps) => {
 
 	const isHappy = props.limitResponse === "OK";
+
+	let safeMin = 0
+	let safeMax = 1
+	let min = 0
+	let max = 1
+
+	switch(props.limit.type){
+		case "range":
+			min = props.limit.max
+			max = props.limit.min
+	}
 
 	const formatName = (name: string) => {
 		switch(name.toLowerCase()){
@@ -77,27 +89,6 @@ const ParameterCard = (props: ParameterProps) => {
 				return <Volume2/>
 		}
 	}
-
-	const getGaugeEnds = (value, limit) => {
-
-
-		switch(limit.type){
-			case "range": 
-				return {min: limit.min, max: value*1.5}
-			case "greatherThan":
-				return {min: limit.value, max: value*1.5}
-			case "lessThan":
-				return {min: 0, max: value*1.5}
-		}
-
-	}
-
-	const { min, max } = getGaugeEnds(props.value, props.limit)
-
-
-
-
-
 	
 	return (
 		<>
@@ -108,24 +99,17 @@ const ParameterCard = (props: ParameterProps) => {
 
 				<Button onClick={() => console.log(props.name)} className="absolute max-w-120 w-80 h-70 sm:w-50 sm:h-60 md:w-60 md:h-60 lg:w-55 2xl:w-70 
 				2xl:h-70 z-100 hidden sm:block bg-trasparent hover:bg-zinc-600 opacity-0 hover:opacity-20 transition-opacity transition-colors"></Button>
-				<h1 className="font-bold text-xl flex items-center gap-2">{formatName(props.name)} {formatSymbol(props.name)}</h1>
-				<div className="relative">
-					<GaugeComponent  type="radial" pointer={{type: "arrow", color: "white", width: 20}} value={props.value} arc={{
-					width: 0.2,
-					padding: 0.05,
-					cornerRadius: 5,
-					subArcs: [
-						{limit: 0},
-						{limit: 1},
-					]
-				}} minValue={min} maxValue={max}/>
-					<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-2/5">
-						{isHappy ? <Smile color={"green"} size={60}/> : <Frown color="red" size={60}/>}
-					</div>
-	
+				<h1 className="mb-[10px] font-bold text-xl flex items-center gap-2">{formatName(props.name)} {formatSymbol(props.name)}</h1>
+				<div className="relative w-full peer">
+					<GaugeChart nrOfLevels={20} percent={0.6} hideText colors={["#FF5F6D", "#66BB6A", "FF5F6D"]} arcWidth={0.2}/>
 				</div>
-				<div className="flex mt-3 sm:mt-5 justify-center items-center w-full">
-					<Button className="flex sm:hidden h-10 w-1/2"><Link className="flex items-center gap-2 font-bold text-md"  href={props.path}>Graph <span><ChartNoAxesCombined/></span></Link></Button>
+
+				<div className="peer [&_text]:hidden"></div>
+				{isHappy ? <Smile color={"green"} size={90}/> : <Frown color="red" size={90}/>}
+				<h1 className="mt-[10px] font-bold text-4xl sm:text-5xl">{props.value}{props.unit}</h1>
+				<div className="flex mt-3 sm:mt-5 justify-between sm:justify-center items-center w-full">
+					<p className="font-bold text-xl">{formatLimit(props.limit)}{props.unit}</p>
+					<Button className="flex sm:hidden h-6"><Link className="flex items-center gap-2 font-bold text-md"  href={props.path}>Graph <span><ChartNoAxesCombined/></span></Link></Button>
 			    </div>
 			</div>
 		</>	

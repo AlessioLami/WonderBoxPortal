@@ -1,13 +1,14 @@
 "use client"
 
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "./ui/sidebar"
-import { ChartColumn, LayoutDashboard } from "lucide-react"
+import { ChartColumn, LayoutDashboard, Settings } from "lucide-react"
 
 const NavMain = () => {
 
 	const items = [
 		{name: "Dashboard", icon: LayoutDashboard, path: "/"},
 		{name: "Statistics", icon: ChartColumn, path: "/statistics"},
+		{name: "Settings", icon: Settings, path: "/settings"}
 	]
 
 	return <SidebarGroup>

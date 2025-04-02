@@ -32,9 +32,6 @@ const chartData: ChartData = [
 	{ day: 7, value: 31 },
 ]
 
-
-
-
 export default function Home() {
 
 	const deviceId = "WXFSTURL00.00030"
@@ -49,17 +46,8 @@ export default function Home() {
 		limitResponse: parameter.limitResponse,
 		unit: parameter.unit,
 		path: `/${parameter.parameter}`,
-		limit: {type: "range", min: 30, max: 60} 
+		limit: {type: "range", min: 0, max: 120} 
 	})) ?? []
-
-
-
-	/*const parameters = [
-		{ name: "Temperature", value: 35, unit: "°C", path: "/temperature", limit: {type: "range", min: 20, max: 45}},
-		{ name: "Humidity", value: 90, unit: "%", path: "/humidity", limit: {type: "range", min: 30, max: 60}},
-		{ name: "Light Intensity", value: 200, unit: "lux", path: "/light_intensity", limit: {type: "greatherThan", value: 100} },
-		{ name: "Noise", value: 50, unit: "dB", path: "/noise", limit: {type: "lessThan", value: 70} },
-		]	*/
 
   return <SidebarProvider>
 			  <AppSidebar/>
@@ -89,7 +77,7 @@ export default function Home() {
 						<>
 							<StatsBar/>
 							<div className="flex flex-col justify-center items-">
-								<div className=" grid  sm:gap-3 md:gap-5 lg:gap-10 2xl:gap-20 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-between items-center w-full">
+								<div className=" grid  sm:gap-x-3 md:gap-x-5 lg:gap-x-10 2xl:gap-20 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-between items-center w-full">
 									{parameters.map((param) => (<ParameterCard key={param.name} {...param}/>))}
 								</div>
 							<ParameterChart chartConfig={chartConfig} chartData={chartData}/>
