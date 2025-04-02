@@ -1,13 +1,11 @@
 "use client"
 
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/Sidebar";
-import {Separator} from "@/components/ui/separator";
 import ParameterCard from "@/components/ParameterCard";
-import ThemeButton from "@/components/ThemeButton";
-import ProfilePicture from "@/components/ProfilePicture"
 import StatsBar from "@/components/StatsBar";
 import ParameterChart, {ChartData, ChartConfig} from "@/components/ParameterChart";
+import Navbar from "@/components/Navbar";
 
 import { useGetMeasurementsQuery } from "./services/backendApi";
 import {Loader2} from "lucide-react";
@@ -49,22 +47,12 @@ export default function Home() {
 		limit: {type: "range", min: 0, max: 120} 
 	})) ?? []
 
-  return <SidebarProvider>
+
+  return(<SidebarProvider>
 			  <AppSidebar/>
 			  <SidebarInset>
 
-				<div className="p-2 text-3xl font-bold h-12 flex items-center border-b-2 border-zinc-900">
-					<SidebarTrigger/>
-					<Separator orientation="vertical" className="mx-2 border-[0.1px] border-zinc-900"/>
-						<div className="flex justify-between w-full">
-							<h1 className="text-xl">Dashboard</h1>
-							<div className="flex gap-2 justify-center items-center text-[20px] text-center">
-								<ThemeButton/>
-								<ProfilePicture/>
-						    </div>
-						</div> 
-				</div>
-
+			 <Navbar title="Dashboard"/>	
 
 			<div className="p-5 flex flex-col items-center">
 				{isLoading ? 
@@ -88,4 +76,5 @@ export default function Home() {
 		</div>	
 			  </SidebarInset>
 		  </SidebarProvider>
+		)
 }
